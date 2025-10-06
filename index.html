@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Notes Sharing System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-book"></i>
+                <span>NotesShare</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link active" data-page="home">Home</a>
+                <a href="#browse" class="nav-link" data-page="browse">Browse Notes</a>
+                <a href="#upload" class="nav-link auth-required" data-page="upload" style="display: none;">Upload</a>
+                <a href="#my-notes" class="nav-link auth-required" data-page="my-notes" style="display: none;">My Notes</a>
+                <a href="#admin" class="nav-link admin-required" data-page="admin" style="display: none;">Admin</a>
+                <a href="#login" class="nav-link auth-not-required" data-page="login">Login</a>
+                <a href="#register" class="nav-link auth-not-required" data-page="register">Register</a>
+                <a href="#" class="nav-link auth-required" id="logout-btn" style="display: none;">Logout</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Share Knowledge, Excel Together</h1>
+                    <p>Join our community of students sharing academic notes and resources. Upload your notes, discover new materials, and collaborate with peers from different courses and semesters.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showPage('browse')">Browse Notes</button>
+                        <button class="btn btn-secondary auth-not-required" onclick="showPage('register')">Join Now</button>
+                        <button class="btn btn-secondary auth-required" onclick="showPage('upload')" style="display: none;">Upload Notes</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="container">
+                    <h2>Why Choose NotesShare?</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-upload"></i>
+                            <h3>Easy Upload</h3>
+                            <p>Upload your notes in PDF, DOC, or PPT format with just a few clicks.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-search"></i>
+                            <h3>Smart Search</h3>
+                            <p>Find notes by subject, course, semester, or keywords quickly and efficiently.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-download"></i>
+                            <h3>Instant Download</h3>
+                            <p>Download approved notes instantly and access them offline anytime.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>Quality Control</h3>
+                            <p>All uploads are moderated by admins to ensure high-quality content.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-username">Username or Email</label>
+                            <input type="text" id="login-username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Login</button>
+                    </form>
+                    <p class="auth-switch">
+                        Don't have an account? <a href="#" onclick="showPage('register')">Register here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="register-page" class="page">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2><i class="fas fa-user-plus"></i> Register</h2>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-username">Username</label>
+                            <input type="text" id="register-username" name="username" required minlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" name="password" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Register</button>
+                    </form>
+                    <p class="auth-switch">
+                        Already have an account? <a href="#" onclick="showPage('login')">Login here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browse Notes Page -->
+        <div id="browse-page" class="page">
+            <div class="container">
+                <h2><i class="fas fa-search"></i> Browse Notes</h2>
+                
+                <!-- Search and Filter -->
+                <div class="search-section">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Search notes by title or description...">
+                        <button onclick="searchNotes()"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="filters">
+                        <select id="subject-filter">
+                            <option value="">All Subjects</option>
+                        </select>
+                        <select id="course-filter">
+                            <option value="">All Courses</option>
+                        </select>
+                        <select id="semester-filter">
+                            <option value="">All Semesters</option>
+                        </select>
+                        <button onclick="applyFilters()" class="btn btn-secondary">Apply Filters</button>
+                    </div>
+                </div>
+
+                <!-- Notes Grid -->
+                <div id="notes-grid" class="notes-grid">
+                    <!-- Notes will be loaded here -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="pagination" class="pagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Notes Page -->
+        <div id="upload-page" class="page">
+            <div class="container">
+                <h2><i class="fas fa-upload"></i> Upload Notes</h2>
+                <div class="upload-container">
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="note-title">Title *</label>
+                                <input type="text" id="note-title" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="note-subject">Subject *</label>
+                                <input type="text" id="note-subject" name="subject" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="note-course">Course *</label>
+                                <input type="text" id="note-course" name="course" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="note-semester">Semester *</label>
+                                <input type="text" id="note-semester" name="semester" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note-description">Description</label>
+                            <textarea id="note-description" name="description" rows="4" placeholder="Brief description of the notes..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="note-file">File * (PDF, DOC, DOCX, PPT, PPTX)</label>
+                            <div class="file-upload">
+                                <input type="file" id="note-file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx" required>
+                                <div class="file-upload-text">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Choose file or drag and drop</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload Notes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Notes Page -->
+        <div id="my-notes-page" class="page">
+            <div class="container">
+                <h2><i class="fas fa-file-alt"></i> My Notes</h2>
+                <div id="my-notes-grid" class="notes-grid">
+                    <!-- User's notes will be loaded here -->
+                </div>
+                <div id="my-notes-pagination" class="pagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Page -->
+        <div id="admin-page" class="page">
+            <div class="container">
+                <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="showAdminTab('pending')">Pending Approval</button>
+                    <button class="tab-btn" onclick="showAdminTab('all')">All Notes</button>
+                </div>
+                <div id="admin-content">
+                    <!-- Admin content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
